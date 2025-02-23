@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Capitals Weather</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            color: #202124;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .location-selector, .weather-card {
+            max-width: 652px;
+            width: 100%;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            font-size: 16px;
+            color: #202124;
+            background: white;
+            cursor: pointer;
+            display: block;
+        }
+
+        .weather-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .location-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .weather-icon {
+            width: 100px;
+            height: 100px;
+            margin: 10px auto;
+        }
+
+        .current-weather {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .weather-details {
+            font-size: 1.2rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="location-selector">
+        <select id="capitalSelect">
+            <option value="">Select a State Capital</option>
+            <option value="new-delhi">New Delhi (Delhi)</option>
+            <option value="mumbai">Mumbai (Maharashtra)</option>
+            <option value="kolkata">Kolkata (West Bengal)</option>
+            <option value="bengaluru">Bengaluru (Karnataka)</option>
+            <option value="chennai">Chennai (Tamil Nadu)</option>
+        </select>
+    </div>
+
+    <div class="weather-card">
+        <div class="location-header">
+            <h1 class="location-name">Select a capital</h1>
+            <span class="current-time"></span>
+        </div>
+
+        <img class="weather-icon" src="" alt="Weather Icon">
+        <div class="current-weather">--°</div>
+        <div class="weather-details">
+            <div class="condition">--</div>
+            <div class="high-low">H: --° L: --°</div>
+        </div>
+    </div>
+
+    <script>
+        const weatherData = {
+            'new-delhi': { temp: 32, condition: 'Clear sky', high: 34, low: 22, icon: 'https://cdn-icons-png.flaticon.com/128/869/869869.png' },
+            'mumbai': { temp: 29, condition: 'Partly cloudy', high: 31, low: 24, icon: 'https://cdn-icons-png.flaticon.com/128/1163/1163661.png' },
+            'kolkata': { temp: 30, condition: 'Humid', high: 32, low: 25, icon: 'https://cdn-icons-png.flaticon.com/128/1779/1779807.png' },
+            'bengaluru': { temp: 26, condition: 'Pleasant', high: 28, low: 19, icon: 'https://cdn-icons-png.flaticon.com/128/1163/1163624.png' },
+            'chennai': { temp: 31, condition: 'Hot and humid', high: 33, low: 26, icon: 'https://cdn-icons-png.flaticon.com/128/869/869869.png' }
+        };
+
+        function updateTime() {
+            const now = new Date();
+            document.querySelector('.current-time').textContent = now.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+        }
+
+        function updateWeather(cityId) {
+            const data = weatherData[cityId];
+            if (!data) return;
+            
+            document.querySelector('.current-weather').textContent = `${data.temp}°`;
+            document.querySelector('.condition').textContent = data.condition;
+            document.querySelector('.high-low').textContent = `H: ${data.high}° L: ${data.low}°`;
+            document.querySelector('.location-name').textContent = document.querySelector(`option[value="${cityId}"]`).textContent.split(' (')[0];
+            document.querySelector('.weather-icon').src = data.icon;
+        }
+
+        document.getElementById('capitalSelect').addEventListener('change', function() {
+            if (this.value) updateWeather(this.value);
+        });
+
+        updateTime();
+        setInterval(updateTime, 60000);
+    </script>
+</body>
+</html>
